@@ -8,6 +8,9 @@ const createButton = document.querySelector('.createRoom');
 const actualRoom = document.querySelector('.actualRoom');
 const roomInput = document.querySelector('.roomInput');
 const youText = document.querySelector('.you');
+const chat = document.querySelector('.chat');
+const chatInput = document.querySelector('.chatInput');
+const form = document.querySelector('form');
 
 const socket = io({
     autoConnect: false
@@ -18,10 +21,33 @@ let turn = 'X'
 let you;
 let room;
 
+const messages = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     turnMessage.textContent = `Es el turno del jugador ${turn}`
-
 });
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    messages.push({ from: you, message: chatInput.value });
+    socket.emit('message', { message: chatInput.value, room })
+    console.log('Mensaje', chatInput.value);
+    updateChat();
+});
+
+socket.on('message', (message) => {
+    console.log(message);
+    messages.push({ from: you == 'X' ? 'O' : 'X', message });
+    updateChat();
+})
+
+const updateChat = () => {
+    chat.innerHTML = '';
+    messages.forEach((el) => {
+        chat.innerHTML += `<p>${el.from}: ${el.message}</p>`
+    })
+    form.reset();
+}
 
 joinButton.addEventListener('click', () => {
     room = parseInt(roomInput.value);
@@ -30,6 +56,8 @@ joinButton.addEventListener('click', () => {
     youText.textContent = `Sos el jugador ${you}`
     actualRoom.textContent = `Sala actual: ${room}`;
     socket.emit("join", { room })
+    reset()
+    socket.emit('reset', { room })
 });
 createButton.addEventListener('click', () => {
     room = parseInt(((Math.random() * 2) * Date.now() * 0.000000005).toFixed(0));
@@ -38,6 +66,8 @@ createButton.addEventListener('click', () => {
     youText.textContent = `Sos el jugador ${you}`
     actualRoom.textContent = `Sala actual: ${room}`;
     socket.emit("create_room", { room })
+    reset()
+    socket.emit('reset', { room })
 });
 
 const reset = () => {

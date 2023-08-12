@@ -32,6 +32,7 @@ io.on('connection', async socket => {
         console.log(`Conectado al room ${room}`);
         socket.join(room);
     })
+
     socket.on('create_room', async ({ room }) => {
         rooms.push(room);
         console.log(`Conectado al room ${room}`);
@@ -46,6 +47,11 @@ io.on('connection', async socket => {
     socket.on('reset', async ({ room }) => {
         console.log(room);
         socket.to(room).emit('reset');
+    })
+
+    socket.on('message', async ({ room, message }) => {
+        console.log(room, message);
+        socket.to(room).emit('message', message);
     })
 
     socket.on('connected', async (data) => {
