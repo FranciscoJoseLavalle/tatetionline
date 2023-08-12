@@ -3,6 +3,15 @@
     <p class="turn"></p>
 </header>
 <main>
+    <p class="actualRoom"></p>
+    <p class="you"></p>
+    <div class="joinContainer">
+        <input type="number" placeholder="Código de sala" class="roomInput">
+        <button class="joinRoom">Unirse a una sala</button>
+    </div>
+    <div class="createContainer">
+        <button class="createRoom">Crear una sala</button>
+    </div>
     <div class="tablero">
         <div class="columna1">
             <div class="cuadrado" id="1"></div>
@@ -22,9 +31,12 @@
         <div class="gameEnded">
             <p>Juego terminado</p>
             <p class="endGame">Ganó el jugador X</p>
-            <button>Reiniciar</button>
+            <button class="reset">Reiniciar</button>
         </div>
     </div>
 </main>
+<footer style="text-align: center; padding-bottom: 1rem;">
+    Desarrollado por <a href="https://franciscolavalle.netlify.app/" target="_blank">Francisco Lavalle</a>
+</footer>
 <script src="/socket.io/socket.io.js"></script>
 <script src="./js/index.js"></script>

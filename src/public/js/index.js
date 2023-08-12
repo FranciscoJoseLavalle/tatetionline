@@ -2,16 +2,42 @@ const cuadrados = document.querySelectorAll('.cuadrado');
 const message = document.querySelector('.endGame');
 const turnMessage = document.querySelector('.turn');
 const gameEnded = document.querySelector('.gameEnded');
-const resetButton = document.querySelector('button');
+const resetButton = document.querySelector('.reset');
+const joinButton = document.querySelector('.joinRoom');
+const createButton = document.querySelector('.createRoom');
+const actualRoom = document.querySelector('.actualRoom');
+const roomInput = document.querySelector('.roomInput');
+const youText = document.querySelector('.you');
+
 const socket = io({
     autoConnect: false
 });
 socket.connect();
 
 let turn = 'X'
+let you;
+let room;
 
 document.addEventListener('DOMContentLoaded', () => {
     turnMessage.textContent = `Es el turno del jugador ${turn}`
+
+});
+
+joinButton.addEventListener('click', () => {
+    room = parseInt(roomInput.value);
+    roomInput.value = '';
+    you = 'O';
+    youText.textContent = `Sos el jugador ${you}`
+    actualRoom.textContent = `Sala actual: ${room}`;
+    socket.emit("join", { room })
+});
+createButton.addEventListener('click', () => {
+    room = parseInt(((Math.random() * 2) * Date.now() * 0.000000005).toFixed(0));
+    console.log(room);
+    you = 'X';
+    youText.textContent = `Sos el jugador ${you}`
+    actualRoom.textContent = `Sala actual: ${room}`;
+    socket.emit("create_room", { room })
 });
 
 const reset = () => {
@@ -22,27 +48,32 @@ const reset = () => {
         cuadrado.classList.remove('blue');
     })
 }
-resetButton.addEventListener('click', reset);
+socket.on('reset', reset);
+resetButton.addEventListener('click', () => {
+    reset()
+    socket.emit('reset', { room })
+});
 
 cuadrados.forEach((cuadrado) => {
     cuadrado.addEventListener('click', e => {
         console.log(e.target.id);
-        socket.emit('movement', e.target.id)
-        console.log("moviendo");
-        if (e.target.textContent == '') {
-            e.target.textContent = turn;
-            if (e.target.textContent == 'X') {
-                e.target.classList.add('red');
-            } else {
-                e.target.classList.add('blue');
+        if (turn === you) {
+            socket.emit('movement', { movement: e.target.id, room })
+            console.log("moviendo");
+            if (e.target.textContent == '') {
+                e.target.textContent = turn;
+                if (e.target.textContent == 'X') {
+                    e.target.classList.add('red');
+                } else {
+                    e.target.classList.add('blue');
+                }
+                checkWin();
+                changeTurn();
+                turnMessage.textContent = `Es el turno del jugador ${turn}`
             }
-            checkWin();
-            changeTurn();
-            turnMessage.textContent = `Es el turno del jugador ${turn}`
         }
     })
 })
-
 
 socket.on('movement', (e) => {
     console.log(e);

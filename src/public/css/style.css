@@ -10,6 +10,9 @@ font-family: 'Roboto', sans-serif; */
 
 body {
     background-color: #eee;
+    max-width: 60rem;
+    width: 100%;
+    margin: auto;
 }
 
 header {
@@ -31,6 +34,7 @@ header {
 h1 {
     text-transform: uppercase;
     font-weight: 900;
+    color: #333;
 }
 
 .turn {
@@ -44,10 +48,71 @@ h1 {
     width: min-content;
 }
 
+.actualRoom,
+.you {
+    text-align: center;
+    color: #333;
+}
+
+.joinContainer,
+.createContainer {
+    display: flex;
+    max-width: 40rem;
+    justify-content: center;
+    margin: auto;
+    padding: 1rem;
+}
+
+.roomInput {
+    border: none;
+    border-radius: 3rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: .5rem;
+    background-color: #eee;
+    color: #333;
+    font-weight: 600;
+    box-shadow: #999 0 0 15px inset;
+    white-space: nowrap;
+    width: min-content;
+    outline: none;
+    transition: .2s;
+    width: 60%;
+}
+
+.roomInput:hover {
+    background-color: #fff;
+}
+
+.joinRoom,
+.createRoom {
+    padding: .5rem;
+    height: 2rem;
+    border: none;
+    color: #ddd;
+    background-color: #333;
+    border-radius: 3rem;
+    width: 100%;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.joinRoom {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.joinRoom:hover,
+.createRoom:hover {
+    border: solid .1rem transparent;
+    color: #000c;
+    background-color: #ddd;
+}
+
 .tablero {
     display: flex;
     flex-direction: column;
-    margin: auto;
+    margin: 2rem auto;
     gap: .5rem;
     border-radius: 2rem;
     overflow: hidden;
@@ -120,7 +185,7 @@ h1 {
     }
 }
 
-button {
+.reset {
     padding: .5rem;
     border: solid .1rem #ddd;
     color: #ddd;
@@ -131,11 +196,12 @@ button {
     transition: .2s;
 }
 
-button:hover {
+.reset:hover {
     border: solid .1rem transparent;
     color: #000c;
     background-color: #ddd;
 }
+
 .flex {
     display: flex;
 }
