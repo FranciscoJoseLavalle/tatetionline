@@ -44,9 +44,10 @@ socket.on('message', (message) => {
 const updateChat = () => {
     chat.innerHTML = '';
     messages.forEach((el) => {
-        chat.innerHTML += `<p>${el.from}: ${el.message}</p>`
+        chat.innerHTML += `<p style="text-align: ${el.from === you ? 'right' : 'left'};">${el.from}: ${el.message}</p>`
     })
     form.reset();
+    chat.scrollTo({ top: 99999999999, left: 0, behavior: "smooth" })
 }
 
 joinButton.addEventListener('click', () => {
@@ -108,7 +109,7 @@ cuadrados.forEach((cuadrado) => {
 socket.on('movement', (e) => {
     console.log(e);
     cuadrados.forEach(cuadrado => {
-        if (cuadrado.id == e) {
+        if (cuadrado.id == e && cuadrado.textContent == '') {
             cuadrado.textContent = turn;
             if (cuadrado.textContent == 'X') {
                 cuadrado.classList.add('red');
