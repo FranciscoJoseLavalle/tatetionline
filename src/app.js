@@ -52,9 +52,9 @@ io.on('connection', async socket => {
         socket.to(room).emit('reset');
     })
 
-    socket.on('message', async ({ room, message, timestamp }) => {
-        console.log(room, message, timestamp);
-        socket.to(room).emit('message', message, timestamp);
+    socket.on('message', async ({ room, message }) => {
+        console.log(room, message);
+        socket.to(room).emit('message', message);
     })
 
     socket.on('connected', async (data) => {

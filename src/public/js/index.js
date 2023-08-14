@@ -30,15 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     let timestamp = Date.now()
-    messages.push({ from: you, message: chatInput.value, timestamp });
-    socket.emit('message', { message: chatInput.value, room, timestamp })
+    messages.push({ from: you, message: chatInput.value });
+    socket.emit('message', { message: chatInput.value, room })
     console.log('Mensaje', chatInput.value);
     updateChat();
 });
 
 socket.on('message', (message) => {
     console.log(message);
-    messages.push({ from: you == 'X' ? 'O' : 'X', message, timestamp });
+    messages.push({ from: you == 'X' ? 'O' : 'X', message });
     updateChat();
 })
 
