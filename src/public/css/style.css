@@ -63,6 +63,17 @@ h1 {
     padding: 1rem;
 }
 
+.createContainer {
+    gap: 1rem;
+}
+
+@media (max-width: 360px) {
+    .createContainer {
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+}
+
 .roomInput,
 .chatInput {
     border: solid .01rem #333;
@@ -99,6 +110,7 @@ h1 {
     font-weight: 600;
     transition: .2s;
     height: min-content;
+    white-space: nowrap;
 }
 
 .joinRoom,
@@ -220,6 +232,7 @@ h1 {
     padding: 1rem;
     margin: auto;
 }
+
 .chat {
     display: flex;
     flex-direction: column;
@@ -229,18 +242,22 @@ h1 {
     overflow-x: hidden;
     min-height: 5rem;
 }
+
 h3 {
     color: #333;
     text-transform: uppercase;
 }
+
 form {
     display: flex;
     justify-content: center;
     margin: .5rem 0;
 }
+
 .chatInput {
     width: 100%;
 }
+
 .sendMessage {
     width: 20%;
     min-width: min-content;

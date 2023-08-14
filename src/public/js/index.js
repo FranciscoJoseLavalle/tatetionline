@@ -29,22 +29,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    messages.push({ from: you, message: chatInput.value });
-    socket.emit('message', { message: chatInput.value, room })
+    let timestamp = Date.now()
+    messages.push({ from: you, message: chatInput.value, timestamp });
+    socket.emit('message', { message: chatInput.value, room, timestamp })
     console.log('Mensaje', chatInput.value);
     updateChat();
 });
 
 socket.on('message', (message) => {
     console.log(message);
-    messages.push({ from: you == 'X' ? 'O' : 'X', message });
+    messages.push({ from: you == 'X' ? 'O' : 'X', message, timestamp });
     updateChat();
 })
 
 const updateChat = () => {
     chat.innerHTML = '';
     messages.forEach((el) => {
-        chat.innerHTML += `<p style="text-align: ${el.from === you ? 'right' : 'left'};">${el.from}: ${el.message}</p>`
+        chat.innerHTML += `<p style="text-align: ${el.from === you ? 'right' : 'left'};"><b>${el.from}:</b> ${el.message}</p>`
     })
     form.reset();
     chat.scrollTo({ top: 99999999999, left: 0, behavior: "smooth" })
@@ -54,22 +55,30 @@ joinButton.addEventListener('click', () => {
     room = parseInt(roomInput.value);
     roomInput.value = '';
     you = 'O';
-    youText.textContent = `Sos el jugador ${you}`
-    actualRoom.textContent = `Sala actual: ${room}`;
+    youText.innerHTML = `Sos el jugador <b>${you}</b>`
+    actualRoom.innerHTML = `Sala actual: <b>${room}</b>`;
     socket.emit("join", { room })
     reset()
     socket.emit('reset', { room })
+    socket.emit('start', { room });
 });
 createButton.addEventListener('click', () => {
     room = parseInt(((Math.random() * 2) * Date.now() * 0.000000005).toFixed(0));
     console.log(room);
     you = 'X';
-    youText.textContent = `Sos el jugador ${you}`
-    actualRoom.textContent = `Sala actual: ${room}`;
+    youText.innerHTML = `Sos el jugador <b>${you}</b>`
+    actualRoom.innerHTML = `Sala actual: <b>${room}</b>`;
     socket.emit("create_room", { room })
     reset()
     socket.emit('reset', { room })
 });
+
+socket.on('start', () => {
+    console.log('llegué');
+    turn = 'X';
+    turnMessage.textContent = `Es el turno del jugador ${turn}`
+    console.log(turn);
+})
 
 const reset = () => {
     gameEnded.classList.remove('flex');

@@ -28,15 +28,18 @@ io.on('connection', async socket => {
     // socket.broadcast.emit('newUser')
 
     socket.on('join', async ({ room }) => {
-        rooms.push(room);
         console.log(`Conectado al room ${room}`);
+        console.log(rooms);
         socket.join(room);
     })
 
     socket.on('create_room', async ({ room }) => {
-        rooms.push(room);
         console.log(`Conectado al room ${room}`);
         socket.join(room);
+    })
+
+    socket.on('start', async ({ room }) => {
+        io.to(room).emit('start');
     })
 
     socket.on('movement', async ({ movement, room }) => {
@@ -49,9 +52,9 @@ io.on('connection', async socket => {
         socket.to(room).emit('reset');
     })
 
-    socket.on('message', async ({ room, message }) => {
-        console.log(room, message);
-        socket.to(room).emit('message', message);
+    socket.on('message', async ({ room, message, timestamp }) => {
+        console.log(room, message, timestamp);
+        socket.to(room).emit('message', message, timestamp);
     })
 
     socket.on('connected', async (data) => {
